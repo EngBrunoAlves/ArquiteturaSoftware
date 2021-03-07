@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BillsToPay.Repository.MySql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillsToPay.IoC", "BillsToPay.IoC\BillsToPay.IoC.csproj", "{DF5795D7-6B81-4F7C-8903-6DA717F9B2EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillsToPay.Domain.Test", "..\test\BillsToPay.Domain.Test\BillsToPay.Domain.Test.csproj", "{E04B709C-58FC-48F8-9B4F-2376136399FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{DF5795D7-6B81-4F7C-8903-6DA717F9B2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF5795D7-6B81-4F7C-8903-6DA717F9B2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF5795D7-6B81-4F7C-8903-6DA717F9B2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04B709C-58FC-48F8-9B4F-2376136399FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04B709C-58FC-48F8-9B4F-2376136399FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04B709C-58FC-48F8-9B4F-2376136399FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04B709C-58FC-48F8-9B4F-2376136399FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{E6FDAC0E-2D65-43C1-84BF-3FE3E18FD11C} = {42A35475-ABCF-4F14-96DC-A2714A04221A}
 		{00AC7B1D-EF63-4C17-86CF-AE43BA872368} = {64AB0099-20CC-4124-956A-27DEBC990D5C}
 		{DF5795D7-6B81-4F7C-8903-6DA717F9B2EF} = {000F3DDC-F7B3-4FFE-BA59-43A54CB8BB2D}
+		{E04B709C-58FC-48F8-9B4F-2376136399FF} = {42A35475-ABCF-4F14-96DC-A2714A04221A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5AB0B94B-A626-4390-B36B-374A1E4128B9}
