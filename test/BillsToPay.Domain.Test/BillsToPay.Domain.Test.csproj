@@ -13,11 +13,4 @@
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
   </ItemGroup>
 
-<<<<<<< HEAD
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\BillsToPay.Domain\BillsToPay.Domain.csproj" />
-  </ItemGroup>
-
-=======
->>>>>>> a010b5484c89b33ba2f64ad9429cbe0b796c4a3d
 </Project>
