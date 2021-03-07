@@ -3,11 +3,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BillsToPay.Domain.IoC;
 
 namespace BillsToPay.Services.Rest
 {
+    using BillsToPay.Application.IoC;
+    using BillsToPay.Repository.MySql.IoC;
+    using BillsToPay.Repository.MySql.Models;
+
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -18,6 +25,24 @@ namespace BillsToPay.Services.Rest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Connection String
+            services.Configure<BillsToPayOptions>(Configuration.GetSection("BillsToPayOptions"));
+
+            //Cors
+            services.AddCors(options => options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                }
+            ));
+
+            //IoC
+            services.DomainIoC();
+            services.RepositoryIoC();
+            services.ApplicationIoC();
             services.AddControllers();
         }
 
@@ -30,9 +55,12 @@ namespace BillsToPay.Services.Rest
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
+            //Cors
+            app.UseCors(MyAllowSpecificOrigins);
+
+            //Authentication
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
