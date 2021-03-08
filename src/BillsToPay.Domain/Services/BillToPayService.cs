@@ -24,20 +24,23 @@
             if (! ModelIsValid.Execute(billToPay, out var results))
                 throw new ModelIsNotValidException($"Errors found: {string.Join("; ", results.Select(x => x.ErrorMessage))}.");
 
+            billToPay.NumberOfDaysOverdue = CalculateNumberOfDaysOverdue.Execute(billToPay);
+
             await uow.BillsToPay.Add(billToPay);
         }
 
         public async Task<IEnumerable<BillToPayLateDto>> List()
         {
             var bills = await uow.BillsToPay.List();
+            var lateFees = await uow.LateFees.List();
 
             return bills
                 .Select(b => new BillToPayLateDto
                 {
                     Name = b.Name,
                     OriginalValue = b.OriginalValue,
-                    CorrectValue = CalculateCorrectValue.Execute(b),
-                    NumberOfDaysOverdue = CalculateNumberOfDaysOverdue.Execute(b),
+                    CorrectValue = CalculateCorrectedValue.Execute(b, lateFees),
+                    NumberOfDaysOverdue = b.NumberOfDaysOverdue,
                     PayDay = b.PayDay
                 })
                 .ToList();

@@ -16,5 +16,6 @@
         }
 
         public DbSet<BillToPay> BillToPay { get; set; }
+        public DbSet<LateFee> LateFee { get; set; }
     }
 }

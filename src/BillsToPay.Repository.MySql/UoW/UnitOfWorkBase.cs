@@ -5,5 +5,6 @@
     internal abstract class UnitOfWorkBase
     {
         protected IBillToPayRepository _billToPayRepository;
+        protected ILateFeeRepository _lateFeeRepository;
     }
 }

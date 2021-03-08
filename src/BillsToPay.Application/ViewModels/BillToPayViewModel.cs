@@ -11,14 +11,14 @@
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Required field")]
-        public decimal OriginalValue { get; set; }
+        public decimal? OriginalValue { get; set; }
 
         [Required(ErrorMessage = "Required field")]
         [DateTimeRangeValidation(ErrorMessage = "Date outside the allowed period")]
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         [Required(ErrorMessage = "Required field")]
         [DateTimeRangeValidation(ErrorMessage = "Date outside the allowed period")]
-        public DateTime PayDay { get; set; }
+        public DateTime? PayDay { get; set; }
     }
 }

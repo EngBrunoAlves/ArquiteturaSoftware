@@ -11,5 +11,6 @@
         void Rollback();
 
         IBillToPayRepository BillsToPay { get; }
+        ILateFeeRepository LateFees { get; }
     }
 }

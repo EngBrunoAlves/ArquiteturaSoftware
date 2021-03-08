@@ -70,9 +70,12 @@
 
         public IBillToPayRepository BillsToPay => _billToPayRepository ??= new BillToPayRepository(_context);
 
+        public ILateFeeRepository LateFees => _lateFeeRepository ??= new LateFeeRepository(_context);
+
         private void DisposeRepositories()
         {
             _billToPayRepository?.Dispose(); _billToPayRepository = null;
+            _lateFeeRepository?.Dispose(); _lateFeeRepository = null;
         }
 
         #region IDisposable Support
