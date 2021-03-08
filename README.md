@@ -1,4 +1,5 @@
 ##Script to create Database
+
 CREATE SCHEMA `billstopay` ;
 
 CREATE TABLE `billstopay`.`billtopay` (
