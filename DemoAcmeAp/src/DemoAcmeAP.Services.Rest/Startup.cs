@@ -1,14 +1,15 @@
-namespace BillsToPay.Services.Rest
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+namespace DemoAcmeAP.Services.Rest
 {
-    using BillsToPay.Application.IoC;
-    using BillsToPay.Domain.IoC;
-    using BillsToPay.Repository.MySql.IoC;
-    using BillsToPay.Repository.MySql.Models;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
+    using DemoAcmeAp.Application.IoC;
+    using DemoAcmeAp.Domain.IoC;
+    using DemoAcmeAp.Repository.SqlServerInMemory.IoC;
+    using Newtonsoft.Json;
 
     public class Startup
     {
@@ -24,9 +25,6 @@ namespace BillsToPay.Services.Rest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Connection String
-            services.Configure<BillsToPayOptions>(Configuration.GetSection("BillsToPayOptions"));
-
             //Cors
             services.AddCors(options => options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
@@ -42,7 +40,12 @@ namespace BillsToPay.Services.Rest
             services.DomainIoC();
             services.RepositoryIoC();
             services.ApplicationIoC();
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(n =>
+                {
+                    n.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    //n.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoAcmeAp.Application\DemoAcmeAp.Application.csproj" />
+    <ProjectReference Include="..\DemoAcmeAp.Domain\DemoAcmeAp.Domain.csproj" />
+    <ProjectReference Include="..\DemoAcmeAp.Repository.SqlServerInMemory\DemoAcmeAp.Repository.SqlServerInMemory.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Base\" />
+  </ItemGroup>
+
+
+</Project>
