@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenWeather.Common.HttpCommunication\OpenWeather.Common.HttpCommunication.csproj" />
+    <ProjectReference Include="..\OpenWeather.Domain\OpenWeather.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
