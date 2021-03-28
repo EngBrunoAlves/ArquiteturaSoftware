@@ -1,17 +1,17 @@
 namespace BillsToPay.Services.Rest
 {
-    using BillsToPay.Application.IoC;
-    using BillsToPay.Domain.IoC;
-    using BillsToPay.Repository.MySql.IoC;
-    using BillsToPay.Repository.MySql.Models;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
+	using BillsToPay.Application.IoC;
+	using BillsToPay.Domain.IoC;
+	using BillsToPay.Repository.MySql.IoC;
+	using Microsoft.AspNetCore.Builder;
+	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.Hosting;
 
-    public class Startup
+	public class Startup
     {
+        private const string defaultApiBasePath = "/billstopay";
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public Startup(IConfiguration configuration)
@@ -24,9 +24,6 @@ namespace BillsToPay.Services.Rest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Connection String
-            services.Configure<BillsToPayOptions>(Configuration.GetSection("BillsToPayOptions"));
-
             //Cors
             services.AddCors(options => options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
@@ -40,7 +37,7 @@ namespace BillsToPay.Services.Rest
 
             //IoC
             services.DomainIoC();
-            services.RepositoryIoC();
+            services.RepositoryIoC(Configuration);
             services.ApplicationIoC();
             services.AddControllers();
         }
@@ -58,6 +55,10 @@ namespace BillsToPay.Services.Rest
 
             //Cors
             app.UseCors(MyAllowSpecificOrigins);
+
+            //Include Base Path
+            string basePath = Configuration["ApiBasePath"] ?? defaultApiBasePath;
+            app.UsePathBase(basePath);
 
             //Authentication
             app.UseAuthorization();

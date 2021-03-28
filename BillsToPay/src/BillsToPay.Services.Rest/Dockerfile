@@ -1,16 +1,17 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["BillsToPay.Services.Rest/BillsToPay.Services.Rest.csproj", "BillsToPay.Services.Rest/"]
-RUN dotnet restore "BillsToPay.Services.Rest/BillsToPay.Services.Rest.csproj"
+COPY ["src/BillsToPay.Services.Rest/BillsToPay.Services.Rest.csproj", "src/BillsToPay.Services.Rest/"]
+COPY ["src/BillsToPay.Application/BillsToPay.Application.csproj", "src/BillsToPay.Application/"]
+COPY ["src/BillsToPay.Domain/BillsToPay.Domain.csproj", "src/BillsToPay.Domain/"]
+COPY ["src/BillsToPay.Repository.MySql/BillsToPay.Repository.MySql.csproj", "src/BillsToPay.Repository.MySql/"]
+RUN dotnet restore "src/BillsToPay.Services.Rest/BillsToPay.Services.Rest.csproj"
 COPY . .
-WORKDIR "/src/BillsToPay.Services.Rest"
+WORKDIR "/src/src/BillsToPay.Services.Rest"
 RUN dotnet build "BillsToPay.Services.Rest.csproj" -c Release -o /app/build
 
 FROM build AS publish

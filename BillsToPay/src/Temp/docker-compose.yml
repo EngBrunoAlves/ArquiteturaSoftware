@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  arquitetura_billstopay:
+    image: ${DOCKER_REGISTRY_PREFIX}arquitetura_billstopay:${TAG_VERSION:-latest}
+    build:
+      context: .
+      dockerfile: BillsToPay.Services.Rest/Dockerfile

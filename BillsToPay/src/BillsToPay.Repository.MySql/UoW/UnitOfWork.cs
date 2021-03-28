@@ -1,29 +1,24 @@
 ﻿namespace BillsToPay.Repository.MySql.UoW
 {
-    using BillsToPay.Domain.Interfaces.Repositories;
-    using BillsToPay.Domain.Interfaces.UoW;
-    using BillsToPay.Repository.MySql.Context;
-    using BillsToPay.Repository.MySql.Repositories;
-    using Microsoft.EntityFrameworkCore.Storage;
-    using System;
-    using System.Threading.Tasks;
-    using BillsToPay.Repository.MySql.Models;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Options;
+	using BillsToPay.Domain.Interfaces.Repositories;
+	using BillsToPay.Domain.Interfaces.UoW;
+	using BillsToPay.Repository.MySql.Context;
+	using BillsToPay.Repository.MySql.Repositories;
+	using Microsoft.EntityFrameworkCore.Storage;
+	using System;
+	using System.Threading.Tasks;
 
-    internal sealed class UnitOfWork : UnitOfWorkBase, IUnitOfWork
+	internal sealed class UnitOfWork : UnitOfWorkBase, IUnitOfWork
     {
         #region Constructor
         private readonly BillsToPayContext _context;
 
         private IDbContextTransaction transaction = null;
 
-        public UnitOfWork(IOptions<BillsToPayOptions> options)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<BillsToPayContext>();
-            optionsBuilder.UseMySql(options?.Value.ConnectionString ?? throw new ArgumentNullException(nameof(options)));
-            _context = new BillsToPayContext(optionsBuilder.Options);
-        }
+		public UnitOfWork(BillsToPayContext context)
+		{
+            _context = context;
+		}
         #endregion
 
         #region Transaction

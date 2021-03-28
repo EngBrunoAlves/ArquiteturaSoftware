@@ -1,0 +1,52 @@
+version: '3.4'
+# Agora para funcionar tem que antes criar a network "proxy" com o seguinte comando: "docker network create --driver overlay --attachable proxy" 
+services:
+  arquitetura_billstopay:
+    image: ${DOCKER_REGISTRY_PREFIX}arquitetura_billstopay:${TAG_VERSION:-latest}
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ConnectionStrings:BillsToPayConnection=server=${MYSQL_DB_HOST};user id=${MYSQL_DB_USER};password=${MYSQL_DB_PASSWORD};persistsecurityinfo=True;database=billstopay;allowuservariables=True;SslMode=none;TreatTinyAsBoolean=false;
+    ports:
+      - "8080:80"
+    networks:
+      - proxy
+      - arq_be
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.servicePath=/billstopay
+        - com.df.port=80
+    depends_on:
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+  
+  mysql:
+    image: mysql:5.7
+    restart: "no"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - proxy
+      - arq_be
+    volumes:
+      - type: bind
+        source: "/C/projetos/Databases/DataFiles"
+        target: "/var/lib/mysql"
+      - type: bind
+        source: "/C/projetos/Databases/conf.d"
+        target: "/etc/mysql/conf.d"
+      - type: bind
+        source: "/C/projetos/Databases/Exports"
+        target: "/tmp/Exports"
+    ports:
+      - 3306:3306
+  
+networks:
+  arq_be:
+    external: false
+  proxy:
+    external: true
