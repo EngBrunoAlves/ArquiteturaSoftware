@@ -23,6 +23,11 @@
         }
         #endregion
 
+        public virtual async Task<int> SaveChanges()
+        {
+            return await Db.SaveChangesAsync();
+        }
+
         public virtual async Task<TEntity> Add(TEntity entity)
         {
             await DbSet.AddAsync(entity);
@@ -50,9 +55,10 @@
             return entitiesUpdated;
         }
 
-        public virtual async Task Remove(TEntity entity)
+        public virtual Task Remove(TEntity entity)
         {
             Db.Entry(entity).State = EntityState.Deleted;
+            return Task.CompletedTask;
         }
 
         public virtual async Task Remove(Guid id)
@@ -61,9 +67,10 @@
             await Remove(entity);
         }
 
-        public virtual async Task RemoveRange(IEnumerable<TEntity> entities)
+        public virtual Task RemoveRange(IEnumerable<TEntity> entities)
         {
             DbSet.RemoveRange(entities);
+            return Task.CompletedTask;
         }
 
         public virtual async Task RemoveRange(IEnumerable<Guid> ids)
@@ -87,14 +94,19 @@
             return await DbSet.Where(predicate).ToListAsync();
         }
 
-        protected async Task<IEnumerable<TEntity>> Where(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return await DbSet.Where(predicate).ToListAsync();
         }
-
-        public virtual async Task<int> SaveChanges()
+        
+        public async  Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, int pageIndex, int size)
         {
-            return await Db.SaveChangesAsync();
+            return await DbSet.Where(predicate).Skip(pageIndex).Take(size).ToListAsync();
+        }
+
+        public async  Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> order, int pageIndex, int size)
+        {
+            return await DbSet.Where(predicate).OrderBy(order).Skip(pageIndex).Take(size).ToListAsync();
         }
 
         public void Dispose()

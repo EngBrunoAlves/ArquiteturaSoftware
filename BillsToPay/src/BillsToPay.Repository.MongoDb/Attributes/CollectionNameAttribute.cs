@@ -3,7 +3,7 @@
 namespace BillsToPay.Repository.MongoDb.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class, Inherited = true)]
-	internal sealed class CollectionNameAttribute : Attribute
+	internal class CollectionNameAttribute : Attribute
 	{
 		public CollectionNameAttribute(string value)
 		{

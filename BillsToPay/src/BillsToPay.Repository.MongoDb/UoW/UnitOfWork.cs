@@ -2,19 +2,20 @@
 using BillsToPay.Domain.Interfaces.UoW;
 using BillsToPay.Repository.MongoDb.Context;
 using BillsToPay.Repository.MongoDb.Repositories;
+using System;
 using System.Threading.Tasks;
 
 namespace BillsToPay.Repository.MongoDb.UoW
 {
-	internal sealed class UnitOfWork : UnitOfWorkBase, IUnitOfWork
-	{
-		#region Constructor
-		private readonly BillsToPayContext _context;
+    internal sealed class UnitOfWork : UnitOfWorkBase, IUnitOfWork
+    {
+        #region Constructor
+        private readonly BillsToPayContext _context;
 
-		public UnitOfWork(BillsToPayContext context)
-		{
-			_context = context;
-		}
+        public UnitOfWork(BillsToPayContext context)
+        {
+            _context = context;
+        }
         #endregion
 
         #region Transaction
@@ -28,9 +29,9 @@ namespace BillsToPay.Repository.MongoDb.UoW
             return false;
         }
 
-        public async Task Commit()
+        public Task Commit()
         {
-            //nop
+            return Task.FromResult(1);
         }
 
         public void Rollback()

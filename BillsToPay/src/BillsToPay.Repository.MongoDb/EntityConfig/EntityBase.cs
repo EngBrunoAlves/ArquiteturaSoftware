@@ -10,11 +10,6 @@ namespace BillsToPay.Repository.MongoDb.EntityConfig
 		Guid Id { get; set; }
 
 		[BsonIgnore]
-		DateTime CreatedOn { get; }
-
-		DateTime ModifiedOn { get; }
-
-		[BsonIgnore]
 		ObjectId ObjectId { get; }
 	}
 }

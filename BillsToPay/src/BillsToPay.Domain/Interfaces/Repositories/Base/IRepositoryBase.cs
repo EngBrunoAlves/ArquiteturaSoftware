@@ -20,8 +20,7 @@
         Task<TEntity> GetById(Guid id);
         Task<IEnumerable<TEntity>> List();
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
-        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, int pageIndex, int size);
-        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, object>> order, int pageIndex, int size);
-        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, object>> order, int pageIndex, int size, bool isDescending);
+        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, int pageIndex, int size);
+        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> order, int pageIndex, int size);
     }
 }
