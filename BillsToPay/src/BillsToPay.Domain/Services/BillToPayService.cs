@@ -1,16 +1,16 @@
 ﻿namespace BillsToPay.Domain.Services.BillToPay
 {
-	using BillsToPay.Domain.BusinessRule;
-	using BillsToPay.Domain.Dtos;
-	using BillsToPay.Domain.Entities;
-	using BillsToPay.Domain.Exceptions;
-	using BillsToPay.Domain.Interfaces.Services;
-	using BillsToPay.Domain.Interfaces.UoW;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+    using BillsToPay.Domain.BusinessRule;
+    using BillsToPay.Domain.Dtos;
+    using BillsToPay.Domain.Entities;
+    using BillsToPay.Domain.Exceptions;
+    using BillsToPay.Domain.Interfaces.Services;
+    using BillsToPay.Domain.Interfaces.UoW;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	internal sealed class BillToPayService : ServiceBase<BillToPay>, IBillToPayService
+    internal sealed class BillToPayService : ServiceBase<BillToPay>, IBillToPayService
     {
         private readonly IUnitOfWork _uow;
 
@@ -21,7 +21,7 @@
 
         public async override Task<BillToPay> Add(BillToPay billToPay)
         {
-            if (! ModelIsValid.Execute(billToPay, out var results))
+            if (!ModelIsValid.Execute(billToPay, out var results))
                 throw new ModelIsNotValidException($"Errors found: {string.Join("; ", results.Select(x => x.ErrorMessage))}.");
 
             billToPay.NumberOfDaysOverdue = CalculateNumberOfDaysOverdue.Execute(billToPay);

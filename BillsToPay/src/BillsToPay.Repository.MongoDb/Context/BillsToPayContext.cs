@@ -1,47 +1,47 @@
-﻿using BillsToPay.Repository.MongoDb.Helpers;
-using BillsToPay.Repository.MongoDb.Models;
-using MongoDB.Driver;
-using System;
-
-namespace BillsToPay.Repository.MongoDb.Context
+﻿namespace BillsToPay.Repository.MongoDb.Context
 {
-	internal sealed class BillsToPayContext : IDisposable
-	{
-		private readonly IBillsToPayMongoDbConfig _config;
-		private MongoClient _client;
-		private bool disposedValue;
+    using BillsToPay.Repository.MongoDb.Helpers;
+    using BillsToPay.Repository.MongoDb.Models;
+    using MongoDB.Driver;
+    using System;
 
-		private MongoClient client => _client ??= new MongoClient(_config.ConnectionString);
+    internal sealed class BillsToPayContext : IDisposable
+    {
+        private readonly IBillsToPayMongoDbConfig _config;
+        private MongoClient _client;
+        private bool disposedValue;
 
-		public BillsToPayContext(IBillsToPayMongoDbConfig config)
-		{
-			_config = config ?? throw new ArgumentNullException(nameof(config));
-		}
+        private MongoClient client => _client ??= new MongoClient(_config.ConnectionString);
 
-		public IMongoCollection<T> GetCollection<T>()
-		{
-			var database = client.GetDatabase(_config.DatabaseName);
-			var collectionName = CollectionNameHelper.GetCollectionName<T>();
-			return database.GetCollection<T>(collectionName);
-		}
+        public BillsToPayContext(IBillsToPayMongoDbConfig config)
+        {
+            _config = config ?? throw new ArgumentNullException(nameof(config));
+        }
 
-		private void Dispose(bool disposing)
-		{
-			if (!disposedValue)
-			{
-				if (disposing)
-				{
-					_client = null;
-				}
+        public IMongoCollection<T> GetCollection<T>()
+        {
+            var database = client.GetDatabase(_config.DatabaseName);
+            var collectionName = CollectionNameHelper.GetCollectionName<T>();
+            return database.GetCollection<T>(collectionName);
+        }
 
-				disposedValue = true;
-			}
-		}
+        private void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _client = null;
+                }
 
-		public void Dispose()
-		{
-			Dispose(disposing: true);
-			GC.SuppressFinalize(this);
-		}
-	}
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+    }
 }

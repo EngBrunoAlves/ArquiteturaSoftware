@@ -1,25 +1,25 @@
-﻿using BillsToPay.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace BillsToPay.Services.Rest.Controllers
+﻿namespace BillsToPay.Services.Rest.Controllers
 {
-	public abstract class BillsToPayControllerBase<TViewModel> : ControllerBase where TViewModel : class
-	{
-		private readonly IAppServiceBase<TViewModel> _appService;
+    using BillsToPay.Application.Interfaces;
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
-		protected BillsToPayControllerBase(IAppServiceBase<TViewModel> appService)
-		{
-			_appService = appService;
-		}
+    public abstract class BillsToPayControllerBase<TViewModel> : ControllerBase where TViewModel : class
+    {
+        private readonly IAppServiceBase<TViewModel> _appService;
 
-		[HttpPost]
-		public async Task<TViewModel> Add([FromBody] TViewModel viewModel)
-		{
-			return await _appService.Add(viewModel);
-		}
+        protected BillsToPayControllerBase(IAppServiceBase<TViewModel> appService)
+        {
+            _appService = appService;
+        }
+
+        [HttpPost]
+        public async Task<TViewModel> Add([FromBody] TViewModel viewModel)
+        {
+            return await _appService.Add(viewModel);
+        }
 
         [HttpPut("{id}")]
         public async Task<TViewModel> Update(Guid id, [FromBody] TViewModel viewModel)

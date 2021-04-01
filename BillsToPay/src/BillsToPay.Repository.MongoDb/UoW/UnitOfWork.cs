@@ -1,12 +1,12 @@
-﻿using BillsToPay.Domain.Interfaces.Repositories;
-using BillsToPay.Domain.Interfaces.UoW;
-using BillsToPay.Repository.MongoDb.Context;
-using BillsToPay.Repository.MongoDb.Repositories;
-using System;
-using System.Threading.Tasks;
-
-namespace BillsToPay.Repository.MongoDb.UoW
+﻿namespace BillsToPay.Repository.MongoDb.UoW
 {
+    using BillsToPay.Domain.Interfaces.Repositories;
+    using BillsToPay.Domain.Interfaces.UoW;
+    using BillsToPay.Repository.MongoDb.Context;
+    using BillsToPay.Repository.MongoDb.Repositories;
+    using System;
+    using System.Threading.Tasks;
+
     internal sealed class UnitOfWork : UnitOfWorkBase, IUnitOfWork
     {
         #region Constructor

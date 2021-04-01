@@ -1,15 +1,17 @@
 namespace BillsToPay.Services.Rest
 {
-	using BillsToPay.Application.IoC;
-	using BillsToPay.Domain.IoC;
-	using BillsToPay.Repository.MySql.IoC;
-	using Microsoft.AspNetCore.Builder;
-	using Microsoft.AspNetCore.Hosting;
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.DependencyInjection;
-	using Microsoft.Extensions.Hosting;
+    using BillsToPay.Application.IoC;
+    using BillsToPay.Domain.IoC;
+    using BillsToPay.Repository.MongoDb.IoC;
+    using BillsToPay.Repository.MySql.IoC;
+    using BillsToPay.Services.Rest.Models;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
 
-	public class Startup
+    public class Startup
     {
         private const string defaultApiBasePath = "/billstopay";
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -35,11 +37,19 @@ namespace BillsToPay.Services.Rest
                 }
             ));
 
+            //Config
+            services.Configure<BillsToPayConfig>(Configuration.GetSection("BillsToPayConfig"));
+
             //IoC
             services.DomainIoC();
-            services.RepositoryIoC(Configuration);
             services.ApplicationIoC();
             services.AddControllers();
+
+            if(bool.Parse(Configuration["BillsToPayConfig:UseMySql"]))
+                services.MySqlRepositoryIoC(Configuration);
+
+            if(bool.Parse(Configuration["BillsToPayConfig:UseMongoDb"]))
+                services.MongoDbRepositoryIoC(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

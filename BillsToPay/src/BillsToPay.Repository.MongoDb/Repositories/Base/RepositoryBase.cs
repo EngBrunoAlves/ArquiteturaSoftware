@@ -1,19 +1,19 @@
-﻿using BillsToPay.Domain.Entities;
-using BillsToPay.Domain.Interfaces.Repositories;
-using BillsToPay.Repository.MongoDb.Context;
-using MongoDB.Driver;
-using Polly;
-using Polly.Retry;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-
-namespace BillsToPay.Repository.MongoDb.Repositories
+﻿namespace BillsToPay.Repository.MongoDb.Repositories
 {
+    using BillsToPay.Domain.Entities;
+    using BillsToPay.Domain.Interfaces.Repositories;
+    using BillsToPay.Repository.MongoDb.Context;
+    using MongoDB.Driver;
+    using Polly;
+    using Polly.Retry;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Net.Sockets;
+    using System.Threading.Tasks;
+
     internal abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : EntityBase
     {
         #region MongoSpecific

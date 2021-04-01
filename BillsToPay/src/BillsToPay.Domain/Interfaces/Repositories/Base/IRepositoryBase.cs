@@ -6,7 +6,7 @@
 	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 
-	public interface IRepositoryBase<TEntity> : IDisposable //where TEntity : EntityBase
+	public interface IRepositoryBase<TEntity> : IDisposable where TEntity : EntityBase
     {
         Task<int> SaveChanges();
         Task<TEntity> Add(TEntity entity);

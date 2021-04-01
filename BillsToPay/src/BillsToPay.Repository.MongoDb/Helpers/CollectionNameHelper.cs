@@ -1,33 +1,33 @@
-﻿using BillsToPay.Repository.MongoDb.Attributes;
-using System.Reflection;
-
-namespace BillsToPay.Repository.MongoDb.Helpers
+﻿namespace BillsToPay.Repository.MongoDb.Helpers
 {
-	internal static class CollectionNameHelper
-	{
-		public static string GetCollectionName<T>()
-		{
-			var collectionName =
-				typeof(T).GetTypeInfo().BaseType.Equals(typeof(object))
-				? GetCollectionNameFromInterface<T>() 
-				: GetCollectionNameFromType<T>();
+    using BillsToPay.Repository.MongoDb.Attributes;
+    using System.Reflection;
 
-			if (string.IsNullOrEmpty(collectionName))
-				collectionName = typeof(T).Name;
+    internal static class CollectionNameHelper
+    {
+        public static string GetCollectionName<T>()
+        {
+            var collectionName =
+                typeof(T).GetTypeInfo().BaseType.Equals(typeof(object))
+                ? GetCollectionNameFromInterface<T>()
+                : GetCollectionNameFromType<T>();
 
-			return collectionName.ToLowerInvariant();
-		}
+            if (string.IsNullOrEmpty(collectionName))
+                collectionName = typeof(T).Name;
 
-		private static string GetCollectionNameFromInterface<T>() =>
-			CustomAttributeExtensions.GetCustomAttribute<CollectionNameAttribute>(typeof(T).GetTypeInfo().Assembly)?.Name ?? typeof(T).Name;
+            return collectionName.ToLowerInvariant();
+        }
 
-		private static string GetCollectionNameFromType<T>()
-		{
-			var entitytype = typeof(T);
+        private static string GetCollectionNameFromInterface<T>() =>
+            CustomAttributeExtensions.GetCustomAttribute<CollectionNameAttribute>(typeof(T).GetTypeInfo().Assembly)?.Name ?? typeof(T).Name;
 
-			var att = CustomAttributeExtensions.GetCustomAttribute<CollectionNameAttribute>(typeof(T).GetTypeInfo().Assembly);
+        private static string GetCollectionNameFromType<T>()
+        {
+            var entitytype = typeof(T);
 
-			return att != null ? att.Name : entitytype.Name;
-		}
-	}
+            var att = CustomAttributeExtensions.GetCustomAttribute<CollectionNameAttribute>(typeof(T).GetTypeInfo().Assembly);
+
+            return att != null ? att.Name : entitytype.Name;
+        }
+    }
 }

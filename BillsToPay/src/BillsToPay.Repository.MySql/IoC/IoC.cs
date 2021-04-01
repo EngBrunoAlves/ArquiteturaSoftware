@@ -10,7 +10,7 @@
 
 	public static class IoC
     {
-        public static void RepositoryIoC(this IServiceCollection services, IConfiguration Configuration)
+        public static void MySqlRepositoryIoC(this IServiceCollection services, IConfiguration Configuration)
         {
             services.AddDbContext<BillsToPayContext>(opt => opt.UseMySql(Configuration.GetConnectionString("BillsToPayConnection") ?? throw new ArgumentNullException("BillsToPayConnection")));
 

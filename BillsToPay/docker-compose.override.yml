@@ -6,6 +6,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ConnectionStrings:BillsToPayConnection=server=${MYSQL_DB_HOST};user id=${MYSQL_DB_USER};password=${MYSQL_DB_PASSWORD};persistsecurityinfo=True;database=billstopay;allowuservariables=True;SslMode=none;TreatTinyAsBoolean=false;
+      - BillsToPayMongoDbConfig:ConnectionString=mongodb://root:root@mongo
+      - BillsToPayMongoDbConfig:DatabaseName=BillsToPayDb
+      - BillsToPayConfig:UseMySql=false
+      - BillsToPayConfig:UseMongoDb=true
     ports:
       - "8080:80"
     networks:
@@ -18,6 +22,7 @@ services:
         - com.df.port=80
     depends_on:
       - mysql
+      - mongo
     logging:
       driver: "json-file"
       options:
@@ -44,7 +49,39 @@ services:
         target: "/tmp/Exports"
     ports:
       - 3306:3306
-  
+
+  mongo-express:
+    image: mongo-express
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+    networks:
+      - proxy
+      - arq_be
+    depends_on:
+      - mongo
+    ports:
+      - 8081:8081
+      
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - proxy
+      - arq_be
+    ports:
+      - "27017:27017"
+ 
+volumes:
+  mongodata:
+      
 networks:
   arq_be:
     external: false
