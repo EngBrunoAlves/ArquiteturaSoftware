@@ -26,9 +26,9 @@ namespace BillsToPay.Repository.MongoDb.Repositories
         public IMongoCollection<TEntity> Collection { get; private set; }
         #endregion
 
-        public async Task<int> SaveChanges()
+        public Task<int> SaveChanges()
         {
-            return 1;
+            return Task.FromResult(1);
         }
 
         public virtual async Task<TEntity> Add(TEntity entity)
