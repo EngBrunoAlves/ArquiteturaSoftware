@@ -5,8 +5,13 @@
     using System.Reflection;
     using System.Text;
 
-    public class EntityBase
+    public abstract class EntityBase
     {
+        public EntityBase()
+        {
+            Id = Guid.NewGuid();
+        }
+
         [Key]
         public Guid Id { get; set; }
 

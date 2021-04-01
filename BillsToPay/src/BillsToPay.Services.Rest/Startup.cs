@@ -4,12 +4,14 @@ namespace BillsToPay.Services.Rest
     using BillsToPay.Domain.IoC;
     using BillsToPay.Repository.MongoDb.IoC;
     using BillsToPay.Repository.MySql.IoC;
+    using BillsToPay.Services.Rest.IoC;
     using BillsToPay.Services.Rest.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Options;
 
     public class Startup
     {
@@ -38,18 +40,15 @@ namespace BillsToPay.Services.Rest
             ));
 
             //Config
-            services.Configure<BillsToPayConfig>(Configuration.GetSection("BillsToPayConfig"));
+            services.Configure<BillsToPayConfig>(Configuration.GetSection(nameof(BillsToPayConfig)));
+            services.AddSingleton<IBillsToPayConfig>(x => x.GetRequiredService<IOptions<BillsToPayConfig>>().Value);
 
             //IoC
             services.DomainIoC();
             services.ApplicationIoC();
             services.AddControllers();
-
-            if(bool.Parse(Configuration["BillsToPayConfig:UseMySql"]))
-                services.MySqlRepositoryIoC(Configuration);
-
-            if(bool.Parse(Configuration["BillsToPayConfig:UseMongoDb"]))
-                services.MongoDbRepositoryIoC(Configuration);
+            services.RepositoryIoC(Configuration);
+            services.SwaggerIoC();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +59,7 @@ namespace BillsToPay.Services.Rest
                 app.UseDeveloperExceptionPage();
             }
 
+            app.SwaggerConfigure();
             app.UseHttpsRedirection();
             app.UseRouting();
 

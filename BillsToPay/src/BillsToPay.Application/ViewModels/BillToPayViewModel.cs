@@ -6,6 +6,8 @@
 
     public class BillToPayViewModel
     {
+        public Guid Id { get; set; }
+        
         [Required(ErrorMessage = "Required field")]
         [MaxLength(8000, ErrorMessage = "Character limit exceeded")]
         public string Name { get; set; }

@@ -8,8 +8,7 @@ services:
       - ConnectionStrings:BillsToPayConnection=server=${MYSQL_DB_HOST};user id=${MYSQL_DB_USER};password=${MYSQL_DB_PASSWORD};persistsecurityinfo=True;database=billstopay;allowuservariables=True;SslMode=none;TreatTinyAsBoolean=false;
       - BillsToPayMongoDbConfig:ConnectionString=mongodb://root:root@mongo
       - BillsToPayMongoDbConfig:DatabaseName=BillsToPayDb
-      - BillsToPayConfig:UseMySql=false
-      - BillsToPayConfig:UseMongoDb=true
+      - BillsToPayConfig:Database=MongoDb
     ports:
       - "8080:80"
     networks:

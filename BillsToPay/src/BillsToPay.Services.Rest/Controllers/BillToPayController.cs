@@ -1,12 +1,12 @@
 ﻿namespace BillsToPay.Services.Rest.Controllers
 {
-	using BillsToPay.Application.Interfaces;
-	using BillsToPay.Application.ViewModels;
-	using Microsoft.AspNetCore.Mvc;
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
+    using BillsToPay.Application.Interfaces;
+    using BillsToPay.Application.ViewModels;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BillToPayController : BillsToPayControllerBase<BillToPayViewModel>
     {
