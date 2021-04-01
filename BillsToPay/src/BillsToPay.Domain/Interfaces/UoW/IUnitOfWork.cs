@@ -1,16 +1,17 @@
 ﻿namespace BillsToPay.Domain.Interfaces.UoW
 {
-    using BillsToPay.Domain.Interfaces.Repositories;
-    using System.Threading.Tasks;
+	using BillsToPay.Domain.Interfaces.Repositories;
+	using System;
+	using System.Threading.Tasks;
 
-    public interface IUnitOfWork
-    {
-        void BeginTransaction();
-        bool HasCurrentTransaction();
-        Task Commit();
-        void Rollback();
+	public interface IUnitOfWork : IDisposable
+	{
+		void BeginTransaction();
+		bool HasCurrentTransaction();
+		Task Commit();
+		void Rollback();
 
-        IBillToPayRepository BillsToPay { get; }
-        ILateFeeRepository LateFees { get; }
-    }
+		IBillToPayRepository BillsToPay { get; }
+		ILateFeeRepository LateFees { get; }
+	}
 }

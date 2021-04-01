@@ -21,8 +21,6 @@
             Db = context;
             DbSet = Db.Set<TEntity>();
         }
-
-        public abstract void Dispose();
         #endregion
 
         public virtual async Task<TEntity> Add(TEntity entity)
@@ -57,7 +55,7 @@
             Db.Entry(entity).State = EntityState.Deleted;
         }
 
-        public virtual async Task Remove(int id)
+        public virtual async Task Remove(Guid id)
         {
             var entity = await DbSet.FindAsync(id);
             await Remove(entity);
@@ -68,13 +66,13 @@
             DbSet.RemoveRange(entities);
         }
 
-        public virtual async Task RemoveRange(IEnumerable<int> ids)
+        public virtual async Task RemoveRange(IEnumerable<Guid> ids)
         {
             foreach (var id in ids)
                 await Remove(id);
         }
 
-        public virtual async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity> GetById(Guid id)
         {
             return await DbSet.FindAsync(id);
         }
@@ -97,6 +95,11 @@
         public virtual async Task<int> SaveChanges()
         {
             return await Db.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

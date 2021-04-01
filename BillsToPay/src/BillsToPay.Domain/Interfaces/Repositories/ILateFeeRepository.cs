@@ -4,6 +4,5 @@
 
     public interface ILateFeeRepository : IRepositoryBase<LateFee>
     {
-
     }
 }

@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BillsToPay.Domain.Test", "t
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{8EAE7029-62D3-4C8C-BAFC-A09188BBB328}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillsToPay.Repository.MongoDb", "src\BillsToPay.Repository.MongoDb\BillsToPay.Repository.MongoDb.csproj", "{76D556D7-0627-4EEE-BD8A-3F67BE926964}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{8EAE7029-62D3-4C8C-BAFC-A09188BBB328}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EAE7029-62D3-4C8C-BAFC-A09188BBB328}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EAE7029-62D3-4C8C-BAFC-A09188BBB328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76D556D7-0627-4EEE-BD8A-3F67BE926964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D556D7-0627-4EEE-BD8A-3F67BE926964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76D556D7-0627-4EEE-BD8A-3F67BE926964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76D556D7-0627-4EEE-BD8A-3F67BE926964}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{79DEE59E-296D-4681-98A5-7646FFAE9701} = {1A120417-83FB-4604-86B1-8ED2C9E28C65}
 		{A692E1DD-CE61-4219-855D-0584B7BEF403} = {64AB0099-20CC-4124-956A-27DEBC990D5C}
 		{1CC447E7-C641-4B0B-B539-E3B951FA5DEA} = {42A35475-ABCF-4F14-96DC-A2714A04221A}
+		{76D556D7-0627-4EEE-BD8A-3F67BE926964} = {64AB0099-20CC-4124-956A-27DEBC990D5C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5AB0B94B-A626-4390-B36B-374A1E4128B9}

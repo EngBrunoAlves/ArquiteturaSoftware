@@ -1,13 +1,12 @@
 ﻿namespace BillsToPay.Domain.Interfaces.Services
 {
-    using BillsToPay.Domain.Dtos;
-    using BillsToPay.Domain.Entities;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+	using BillsToPay.Domain.Dtos;
+	using BillsToPay.Domain.Entities;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
-    public interface IBillToPayService
+	public interface IBillToPayService : IServiceBase<BillToPay>
     {
-        Task Create(BillToPay billToPay);
-        Task<IEnumerable<BillToPayLateDto>> List();
-    }
+		Task<IEnumerable<BillToPayLateDto>> ListBillToPayLateDto();
+	}
 }

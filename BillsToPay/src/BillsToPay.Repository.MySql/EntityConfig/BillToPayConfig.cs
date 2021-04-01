@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    public class BillToPayConfig : IEntityTypeConfiguration<BillToPay>
+    internal sealed class BillToPayConfig : IEntityTypeConfiguration<BillToPay>
     {
         public void Configure(EntityTypeBuilder<BillToPay> builder)
         {

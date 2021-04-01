@@ -4,7 +4,7 @@
     using BillsToPay.Repository.MySql.EntityConfig;
     using Microsoft.EntityFrameworkCore;
 
-    public class BillsToPayContext : DbContext
+    internal sealed class BillsToPayContext : DbContext
     {
         public BillsToPayContext(DbContextOptions<BillsToPayContext> options) : base(options) { }
 

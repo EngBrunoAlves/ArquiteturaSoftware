@@ -1,12 +1,11 @@
 ﻿namespace BillsToPay.Application.Interfaces
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using BillsToPay.Application.ViewModels;
+	using BillsToPay.Application.ViewModels;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
-    public interface IBillToPayAppService
-    {
-        Task Create(BillToPayViewModel billToPayViewModel);
-        Task<IEnumerable<BillToPayLateViewModel>> List();
-    }
+	public interface IBillToPayAppService : IAppServiceBase<BillToPayViewModel>
+	{
+		Task<IEnumerable<BillToPayLateViewModel>> ListBillToPayLate();
+	}
 }

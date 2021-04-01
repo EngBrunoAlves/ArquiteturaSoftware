@@ -1,32 +1,26 @@
 ﻿namespace BillsToPay.Services.Rest.Controllers
 {
-    using BillsToPay.Application.Interfaces;
-    using BillsToPay.Application.ViewModels;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+	using BillsToPay.Application.Interfaces;
+	using BillsToPay.Application.ViewModels;
+	using Microsoft.AspNetCore.Mvc;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
-    public class BillToPayController : ControllerBase
+    public class BillToPayController : BillsToPayControllerBase<BillToPayViewModel>
     {
-        private readonly IBillToPayAppService _appService;
+        private readonly IBillToPayAppService _billToPayAppService;
 
-        public BillToPayController(IBillToPayAppService appService)
+        public BillToPayController(IBillToPayAppService billToPayAppService) : base(billToPayAppService)
         {
-            _appService = appService;
+            _billToPayAppService = billToPayAppService;
         }
 
-        [HttpPost]
-        public async Task Create(BillToPayViewModel billToPay)
+        [HttpGet("ListBillToPayLate")]
+        public async Task<IEnumerable<BillToPayLateViewModel>> ListBillToPayLate()
         {
-            await _appService.Create(billToPay);
-        }
-
-        [HttpGet]
-        public async Task<IEnumerable<BillToPayLateViewModel>> List()
-        {
-            return await _appService.List();
+            return await _billToPayAppService.ListBillToPayLate();
         }
     }
 }
