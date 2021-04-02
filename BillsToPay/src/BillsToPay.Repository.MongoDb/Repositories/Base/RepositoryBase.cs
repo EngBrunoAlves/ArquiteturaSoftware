@@ -109,11 +109,18 @@
            });
         }
 
+        public async Task<bool> Any()
+        {
+            return await Retry(() => {
+                return Collection.Find(_ => true).AnyAsync();
+            });
+        }
+
         public async Task<IEnumerable<TEntity>> List()
         {
             return await Retry(() =>
             {
-                return Collection.Find(x => true).ToListAsync();
+                return Collection.Find(_ => true).ToListAsync();
             });
         }
 

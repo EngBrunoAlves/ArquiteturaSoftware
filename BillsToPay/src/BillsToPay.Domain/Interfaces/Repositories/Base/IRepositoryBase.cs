@@ -18,6 +18,8 @@
         Task RemoveRange(IEnumerable<TEntity> entities);
         Task RemoveRange(IEnumerable<Guid> ids);
         Task<TEntity> GetById(Guid id);
+
+        Task<bool> Any();
         Task<IEnumerable<TEntity>> List();
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, int pageIndex, int size);

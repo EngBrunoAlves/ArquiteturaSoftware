@@ -84,6 +84,11 @@
             return await DbSet.FindAsync(id);
         }
 
+        public virtual async Task<bool> Any()
+        {
+            return await DbSet.AnyAsync();
+        }
+
         public virtual async Task<IEnumerable<TEntity>> List()
         {
             return await DbSet.ToListAsync();
