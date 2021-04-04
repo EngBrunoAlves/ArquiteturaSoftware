@@ -2,8 +2,6 @@ namespace BillsToPay.Services.Rest
 {
     using BillsToPay.Application.IoC;
     using BillsToPay.Domain.IoC;
-    using BillsToPay.Repository.MongoDb.IoC;
-    using BillsToPay.Repository.MySql.IoC;
     using BillsToPay.Services.Rest.IoC;
     using BillsToPay.Services.Rest.Models;
     using Microsoft.AspNetCore.Builder;
@@ -11,6 +9,7 @@ namespace BillsToPay.Services.Rest
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
     public class Startup
@@ -48,17 +47,19 @@ namespace BillsToPay.Services.Rest
             services.ApplicationIoC();
             services.AddControllers();
             services.RepositoryIoC(Configuration);
+            services.LoggerIoC(Configuration);
             services.SwaggerIoC();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.LoggerConfigure(loggerFactory);
             app.SwaggerConfigure();
             app.UseHttpsRedirection();
             app.UseRouting();

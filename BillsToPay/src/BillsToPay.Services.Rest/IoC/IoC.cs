@@ -8,8 +8,11 @@ namespace BillsToPay.Services.Rest.IoC
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.PlatformAbstractions;
     using Microsoft.OpenApi.Models;
+    using Serilog;
+    using Serilog.Sinks.Elasticsearch;
 
     public static class IoC
     {
@@ -31,6 +34,19 @@ namespace BillsToPay.Services.Rest.IoC
             }
         }
 
+        public static void LoggerIoC(this IServiceCollection services, IConfiguration Configuration)
+        {
+            var uri = Configuration.GetSection("ElasticConfiguration:Uri").Value;
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(uri))
+                {
+                    AutoRegisterTemplate = true
+                })
+                .CreateLogger();
+        }
+
         public static void SwaggerIoC(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -46,6 +62,11 @@ namespace BillsToPay.Services.Rest.IoC
                 var xmlDocPath = Path.Combine(applicationBasePath, $"{applicationName}.xml");
                 c.IncludeXmlComments(xmlDocPath);
             });
+        }
+
+        public static void LoggerConfigure(this IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddSerilog();
         }
 
         public static void SwaggerConfigure(this IApplicationBuilder app)
