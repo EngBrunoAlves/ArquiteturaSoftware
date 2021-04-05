@@ -9,6 +9,7 @@ services:
       - BillsToPayMongoDbConfig:ConnectionString=mongodb://root:root@mongo
       - BillsToPayMongoDbConfig:DatabaseName=BillsToPayDb
       - BillsToPayConfig:Database=MongoDb
+      - ElasticConfiguration:Uri=http://es01:9200/
     ports:
       - "8080:80"
     networks:
@@ -22,6 +23,7 @@ services:
     depends_on:
       - mysql
       - mongo
+      - es01
     logging:
       driver: "json-file"
       options:

@@ -54,6 +54,7 @@
             try
             {
                 await func?.Invoke();
+
                 return new TResult
                 {
                     Success = true
