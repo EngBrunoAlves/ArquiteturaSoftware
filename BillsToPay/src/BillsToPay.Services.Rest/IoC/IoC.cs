@@ -37,12 +37,15 @@ namespace BillsToPay.Services.Rest.IoC
         public static void LoggerIoC(this IServiceCollection services, IConfiguration Configuration)
         {
             var uri = Configuration.GetSection("ElasticConfiguration:Uri").Value;
+            var username = Configuration.GetSection("ElasticConfiguration:Username").Value;
+            var password = Configuration.GetSection("ElasticConfiguration:Password").Value;
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(uri))
                 {
-                    AutoRegisterTemplate = true
+                    AutoRegisterTemplate = true,
+                    ModifyConnectionSettings = x => x.BasicAuthentication(username, password)
                 })
                 .CreateLogger();
         }

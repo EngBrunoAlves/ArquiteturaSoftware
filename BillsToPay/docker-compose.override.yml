@@ -8,13 +8,18 @@ services:
       - ConnectionStrings:BillsToPayConnection=server=${MYSQL_DB_HOST};user id=${MYSQL_DB_USER};password=${MYSQL_DB_PASSWORD};persistsecurityinfo=True;database=billstopay;allowuservariables=True;SslMode=none;TreatTinyAsBoolean=false;
       - BillsToPayMongoDbConfig:ConnectionString=mongodb://root:root@mongo
       - BillsToPayMongoDbConfig:DatabaseName=BillsToPayDb
-      - BillsToPayConfig:Database=MongoDb
+      - BillsToPayConfig:Database=MySql
       - ElasticConfiguration:Uri=http://es01:9200/
+      - ElasticConfiguration:Username=elastic
+      - ElasticConfiguration:Password=SMTbsaC0eXhbiNpy8H2g
     ports:
       - "8080:80"
     networks:
-      - proxy
       - arq_be
+      - mongo
+      - mysql
+      - elk
+      - proxy
     deploy:
       labels:
         - com.df.notify=true
@@ -35,9 +40,11 @@ services:
     restart: "no"
     environment:
       MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
     networks:
+      - mysql
       - proxy
-      - arq_be
     volumes:
       - type: bind
         source: "/C/projetos/Databases/DataFiles"
@@ -48,9 +55,7 @@ services:
       - type: bind
         source: "/C/projetos/Databases/Exports"
         target: "/tmp/Exports"
-    ports:
-      - 3306:3306
-
+    
   mongo-express:
     image: mongo-express
     environment:
@@ -59,55 +64,69 @@ services:
       ME_CONFIG_MONGODB_PORT: 27017
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
-    networks:
-      - proxy
-      - arq_be
-    depends_on:
-      - mongo
     ports:
       - 8081:8081
+    networks:
+      - mongo
+      - proxy
+    depends_on:
+      - mongo
       
   mongo:
     image: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
     volumes:
       - mongodata:/data/db
     networks:
-      - proxy
-      - arq_be
-    ports:
-      - "27017:27017"
+      - mongo
 
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
     container_name: es01
     environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - node.name=es01
-      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02,es01
+      - discovery.seed_hosts=es02,es02
       - discovery.seed_hosts=es02,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    volumes:
-      - data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
-      - proxy
-      - arq_be
+      - elk
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/cert/elastic-certificates.p12
+        target: /usr/share/elasticsearch/config/elastic-certificates.p12
+        read_only: true
+      - type: volume
+        source: data01
+        target: /usr/share/elasticsearch/data
 
   es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
     container_name: es02
     environment:
       - node.name=es02
-      - cluster.name=es-docker-cluster
       - discovery.seed_hosts=es01,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
@@ -116,18 +135,29 @@ services:
       memlock:
         soft: -1
         hard: -1
-    volumes:
-      - data02:/usr/share/elasticsearch/data
     networks:
-      - proxy
-      - arq_be
+      - elk
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/cert/elastic-certificates.p12
+        target: /usr/share/elasticsearch/config/elastic-certificates.p12
+        read_only: true
+      - type: volume
+        source: data02
+        target: /usr/share/elasticsearch/data
 
   es03:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
     container_name: es03
     environment:
       - node.name=es03
-      - cluster.name=es-docker-cluster
       - discovery.seed_hosts=es01,es02
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
@@ -136,23 +166,73 @@ services:
       memlock:
         soft: -1
         hard: -1
-    volumes:
-      - data03:/usr/share/elasticsearch/data
     networks:
-      - proxy
-      - arq_be
+      - elk
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/cert/elastic-certificates.p12
+        target: /usr/share/elasticsearch/config/elastic-certificates.p12
+        read_only: true
+      - type: volume
+        source: data03
+        target: /usr/share/elasticsearch/data
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.12.0
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
     container_name: kibana
-    ports:
-      - 5601:5601
     environment:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+    ports:
+      - 5601:5601
     networks:
+      - elk
       - proxy
-      - arq_be
+    volumes:
+      - type: bind
+        source: ./kibana/config/kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
+        read_only: true
+    depends_on:
+      - es01
+      - es02
+      - es03
+
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    environment: 
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600" 
+    networks:
+      - elk
+      - proxy
+    volumes:
+      - type: bind
+        source: ./logstash/config/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    depends_on:
+      - es01
+      - es02
+      - es03
  
 volumes:
   mongodata:
@@ -164,6 +244,12 @@ volumes:
     driver: local
       
 networks:
+  elk:
+    driver: bridge
+  mongo:
+    external: false
+  mysql:
+    external: false
   arq_be:
     external: false
   proxy:
